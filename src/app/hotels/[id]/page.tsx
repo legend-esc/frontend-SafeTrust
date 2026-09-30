@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useRef, useState, useEffect } from "react";
+import { use } from "react";
 import dynamic from "next/dynamic";
 import Header from "@/components/layouts/Header";
 import { SideBar } from "@/components/layouts/SideBar";
@@ -8,18 +8,16 @@ import Gallery from "@/components/hotels/details/Gallery";
 import Information from "@/components/hotels/details/Information";
 import Details from "@/components/hotels/details/Details";
 
-/**
- * Leaflet / react-leaflet is only loaded when the map section enters the
- * viewport (IntersectionObserver).  This keeps it out of the initial bundle
- * for /hotels/[id] and avoids the SSR window-is-not-defined error.
- */
 const HotelMap = dynamic(
   () => import("@/components/hotels/payment/Map"),
   {
     ssr: false,
     loading: () => (
-      <div className="h-full w-full rounded-lg bg-gray-200 animate-pulse flex items-center justify-center text-gray-400 text-sm">
-        Loading map…
+      <div
+        className="flex h-full min-h-[250px] items-center justify-center rounded-lg bg-gray-200 text-sm text-gray-600 dark:bg-gray-800 dark:text-gray-300"
+        role="status"
+      >
+        Loading map...
       </div>
     ),
   },
