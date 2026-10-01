@@ -15,7 +15,9 @@ import { setSessionCookie } from "@/lib/auth/session";
 import { useGlobalAuthenticationStore } from "@/core/store/data";
 import { useEffect, useState, useCallback } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { FirebaseError } from "firebase/app";
+import { auth } from "@/lib/firebase";
 import { useMultiWallet } from "./wallet/hooks/multi-wallet.hook";
 import { toast } from "sonner";
 import { WalletProviderScoped } from "@/providers/WalletProviderScoped";
@@ -254,21 +256,35 @@ function LoginForm() {
       <Illustration />
 
       {/* Wallet modals are lazy-loaded and only rendered when opened */}
-      <MainWalletSelectionModal
-        isOpen={isMainModalOpen}
-        onClose={closeMainModal}
-        onWalletTypeSelected={handleWalletTypeSelected}
-      />
-      <WalletSelectionModal
-        isOpen={isStellarModalOpen}
-        onClose={closeStellarModal}
-        onWalletSelected={handleStellarWalletSelected}
-      />
-      <MetaMaskWalletModal
-        isOpen={isMetaMaskModalOpen}
-        onClose={closeMetaMaskModal}
-        onWalletConnected={handleMetaMaskSelected}
-      />
+      {isMainModalOpen && (
+        <MainWalletSelectionModal
+          isOpen={isMainModalOpen}
+          onClose={closeMainModal}
+          onWalletTypeSelected={handleWalletTypeSelected}
+        />
+      )}
+      {isStellarModalOpen && (
+        <WalletSelectionModal
+          isOpen={isStellarModalOpen}
+          onClose={closeStellarModal}
+          onWalletSelected={handleStellarWalletSelected}
+        />
+      )}
+      {isMetaMaskModalOpen && (
+        <MetaMaskWalletModal
+          isOpen={isMetaMaskModalOpen}
+          onClose={closeMetaMaskModal}
+          onWalletConnected={handleMetaMaskSelected}
+        />
+      )}
     </div>
+  );
+}
+
+export default function Login() {
+  return (
+    <WalletProviderScoped>
+      <LoginForm />
+    </WalletProviderScoped>
   );
 }
